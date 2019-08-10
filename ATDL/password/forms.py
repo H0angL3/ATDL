@@ -1,11 +1,16 @@
 from django import forms
 
 class RegisterForm(forms.Form):
-    username = forms.CharField(label="username", max_length=100)
-    password = forms.CharField(label='password', max_length=100)
+    username = forms.CharField(label="Username", max_length=100)
+    password = forms.CharField(label='Password', max_length=100)
+    confirmPassword = forms.CharField(label= "Confirm password", max_length= 100)
 
+class Login(forms.Form):
+    username =  forms.CharField(label="Username", max_length= 100)
+    password = forms.CharField(label="Password", max_length= 100
+                               )
 class UserForm(forms.Form):
-    chal_username = forms.CharField(label='username', max_length= 100)
+    chal_username = forms.CharField(label='Username', max_length= 100)
 
 class ChallengeForm(forms.Form):
     chal_password = forms.CharField(label='Password', max_length=100, required=False)

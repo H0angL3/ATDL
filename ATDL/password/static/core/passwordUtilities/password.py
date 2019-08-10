@@ -1,4 +1,6 @@
 import hashlib
+import random
+import string
 class Password:
     '''
     mat khau bao gim chu cai tieng anh, chu so, dau gach duoi
@@ -25,11 +27,15 @@ class Password:
         self.andersonG = 10**5
         self.md5 = None
         #salt bit
-        self.salt = '_B1'
+        self.salt = None
 
 
     def themmuoi(self):
-        self.password = self.password + self.salt
+        char = random.choice(string.ascii_letters) + random.choice(string.ascii_letters)
+        digist = random.randint(10, 99)
+        salt = '{}_{}'.format(char, digist)
+        self.password = self.password + salt
+        self.salt = salt
 
     def hashMD5(self):
         self.md5 = hashlib.md5(self.password.encode('utf-8')).hexdigest()

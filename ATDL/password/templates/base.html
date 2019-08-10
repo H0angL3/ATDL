@@ -30,6 +30,7 @@
                         e.stopPropagation();
                         $.ajax({
                             type: "POST",
+
                             url: "checkAnderson",
                             data: $('#form_1').serialize(),
                             dataType:'json',
@@ -50,7 +51,7 @@
         
             </script>
     </section>
-    
+ <section>
 <!-- THACH THU DAP UNG Challenge response -->
         <h3>Thách thức đáp ứng</h3>
 
@@ -134,6 +135,93 @@
             })
         })
 </script>
+</section> 
 <!-- THACH THU DAP UNG Challenge response -->
+  
+<section>
+<!-- Thêm muối vào mật khẩu -->
+<h3>Thêm muối vào mật khẩu</h3>
+<p>Mô tả: Đăng kí tài khoản, mật khẩu lưu trong CSDL dưới dạng pasword + salt <br>
+    salt: Sinh ra ngẫu nhiên lưu trong CSDL với template (2char + '_' + 2digit)
+</p>
+<h4> Đăng kí</h4>
+<form id="f_signup">
+    {% csrf_token %}
+    {{form_signup_salt}}
+    <input type="submit" name="" id="" value="Sign Up">
+</form>
+<div id = 'a123'></div>
+<h4>Đăng nhập và trả về các thuộc tính theo công thức anderson</h4>
+<form action="" id=f_signin>
+    {% csrf_token %}
+    {{form_signin_salt}}
+    <input type="submit" name="" id="" value="Sin In">
+</form>
+<div id = 'anderson_salt'>
+
+</div>
+
+<script>
+$(document).ready(function(){
+    //sign up
+    $('#f_signup').on('submit',function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        var pwd = $('#f_signup input[name =password]').val();
+        var confirmPwd = $('#f_signup input[name =confirmPassword]').val();
+        if(pwd != confirmPwd){
+            alert('Password and confirm password does not match!');
+        }
+        else {
+            $.ajax({
+                type : 'POST',
+                url: 'salt_signup',
+                dataType: 'json',
+                data: $('#f_signup').serialize(),
+                success: function(data){
+                    console.log(data);
+                    alert(data['mess']);  
+                  
+                }
+                
+            })
+        }
+    })
+    //------------------------------------------------
+    //sign in
+    $('#f_signin').on('submit', function(e){
+        e.preventDefault();
+        e.stopPropagation();
+        $.ajax({
+            type : 'POST',
+                url: 'salt_signin',
+                dataType: 'json',
+                data: $('#f_signin').serialize(),
+                success: function(data){
+                    console.log(data);
+                    alert(data['mess']);
+                    if(data['statusCode'] == 200){
+                        var properties = data['pwdProperties'];
+                        var tabletemp;
+                                Object.keys(properties).forEach(function(key) {
+                                    tabletemp += '<tr><td>' + key +'</td><td>' + properties[key] +'</td></tr>';
+                                // console.table('Key : ' + key + ', Value : ' + data[key]);
+                                })
+                                $('#anderson_salt').html(tabletemp);
+                    }
+                }
+        })
+    })
+
+
+})
+</script>
+</section>
+
+<section>
+    <!-- Hạn chế bruteforce bằng cách phạt thời gian nếu đăng nhập sai -->
+    <h3>Hạn chế bruteforce</h3>
+
+</section>
 </body>
 </html>

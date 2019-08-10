@@ -1,6 +1,12 @@
 from django.db import models
 
 # Create your models here.
+class UserSalt(models.Model):
+    us_IDuser = models.AutoField(primary_key= True)
+    us_username = models.CharField(max_length=100)
+    us_password = models.CharField(max_length=100)
+    us_salt = models.CharField(max_length=50)
+
 class User(models.Model):
     ID_user = models.AutoField(primary_key=True)
     user_name = models.CharField(max_length=100)
