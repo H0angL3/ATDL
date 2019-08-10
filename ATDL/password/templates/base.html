@@ -5,19 +5,135 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <link rel="stylesheet" href="{{'/password/css/style.css'}}">
+    <script  type="text/javascript" src="{{'/password/js/jquery-3.4.1.min.js'}}"></script>
+    <script  type="text/javascript" src="{{'/password/js/md5.min.js'}}"></script>
+    <title>ATDL_XacThuc</title>
+
 </head>
 <body>
     <h1> Xác thực mật khẩu </h1>
-    <div>
-        <h3>Kiểm tra mật khẩu</h3>
-        <form action="result.html" method="post">
-            {% csrf_token %} 
-            {{form_mk}}
-            <input type="submit" name="" id="">
-        </form>
-         
-    </div>
+    <section class="anderson">
+        <div>
+            <h3 id = 'header_1'>Kiểm tra mật khẩu với công thức anderson</h3>
+            <form id = 'form_1'>
+                {% csrf_token %} 
+                {{form_mk_basic}}
+                <input type = 'submit' value="Check Anderson">
+            </form>
+        </div>
+        <div id = 'andersonRes'></div>
+        <script>
+                $(document).ready(function(){
+                    $('#form_1').on('submit', function(e){
+                        e.preventDefault();
+                        e.stopPropagation();
+                        $.ajax({
+                            type: "POST",
+                            url: "checkAnderson",
+                            data: $('#form_1').serialize(),
+                            dataType:'json',
+                            success: function(data){
+                                console.log(data);
+                                // $('#andersonRes').html(JSON.stringify(data));
+                                var tabletemp;
+                                Object.keys(data).forEach(function(key) {
+                                    tabletemp += '<tr><td>' + key +'</td><td>' + data[key] +'</td></tr>';
+                                // console.table('Key : ' + key + ', Value : ' + data[key]);
+                                })
+                                $('#andersonRes').html(tabletemp);
+                            },  
+                            
+                        })
+                    })
+                })
+        
+            </script>
+    </section>
     
+<!-- THACH THU DAP UNG Challenge response -->
+        <h3>Thách thức đáp ứng</h3>
+
+        <form action="" id='checkuser'>
+            {% csrf_token %}
+            {{form_user}}   
+           <input type="submit" name="" value="Login">
+        </form>
+        <div id="serverChallengeNumber" ></div>
+
+        <form action="" id ='login_chall_res'>
+            {% csrf_token %}
+            {{form_loginChall}}
+            <input type="submit" name="" id="Login">
+        </form>
+        
+    </div>
+    <script>
+        $(document).ready(function(){
+            var form = $('#checkuser');
+            var sectionID;
+            var formLogin = $('#login_chall_res');
+            // hide password and numver filed before check username
+            formLogin.hide();
+            form.on('submit',function(e){
+                username = $('#id_chal_username').val();
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('submit');
+                $.ajax({
+                type: "GET",
+                url: 'requestLogin',
+                dataType: 'json',
+                data: form.serialize(),
+                success: function(data){
+                    console.log(data);
+                    console.log();
+                    // show login form if user is exist
+                    var status = data['statusCode'];
+                    console.log(status);
+                    if(status === 200){
+                        $('#serverChallengeNumber').html("Mã xác nhận của bạn là: " + data['challenge_number']);
+                        $('#login_chall_res').show();
+                        $('#checkuser').hide();
+                        sectionID = data['sectionID'];
+                    }
+                    else{
+                        $('#serverChallengeNumber').html('Sai tài khoản');
+                    }
+                 },
+                error: function(data){
+                   
+                }
+                })
+            })
+
+            
+            formLogin.on('submit', function(e){
+                e.preventDefault();
+                var password = $('#id_chal_password').val();
+                var chalNum = $('#id_serverChalNum').val();
+                var hashval = password + chalNum ;
+                hashval = md5(hashval);
+                console.log(hashval);
+                $.ajax({
+                    type: 'POST',
+                    url: 'challengeResponse',
+                    dataType: 'json',
+                    data:{
+                        sectionID: sectionID,                        
+                        hashpassword: hashval,
+                        csrfmiddlewaretoken:  $('input[ name = csrfmiddlewaretoken]').val(),
+                    },
+                    success : function(data){
+                        console.log(data);
+                        alert(data['mess']);
+                    }
+                })           
+               
+
+            })
+        })
+</script>
+<!-- THACH THU DAP UNG Challenge response -->
 </body>
 </html>

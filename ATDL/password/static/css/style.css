@@ -1,0 +1,9 @@
+#header_1{
+    color: red;
+}
+h3{
+color: red;
+}
+table, th, td {
+  border: 1px solid black;
+}
