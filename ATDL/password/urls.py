@@ -10,6 +10,8 @@ urlpatterns = [
     path('challengeResponse',views.challengeResponse, name = 'challengeResponse'),
     path('salt_signup', views.salt_signup, name=  'salt_sinup'),
     path('salt_signin', views.salt_signin, name = 'salt_signin'),
+    path('preventBrutefoceCheckusername', views.prevBrutefoceCheckusername, name = 'preventBrutefoceCheckusername'),
+    path('preventBrutefoce', views.prevBrutefoce, name= 'preventBrutefoce')
 ]
 
 

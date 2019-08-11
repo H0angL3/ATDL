@@ -221,7 +221,100 @@ $(document).ready(function(){
 <section>
     <!-- Hạn chế bruteforce bằng cách phạt thời gian nếu đăng nhập sai -->
     <h3>Hạn chế bruteforce</h3>
+    <form action="" id='checkusernameBF'>
+        {% csrf_token %}
+        {{form_bruteforce_user}}
+        <input type="submit" name="" id="" value="Login">   
+    </form>
+    <div id = 'bfUserMess'>
 
+    </div>
+    <form action="" id='loginBF'>
+            {% csrf_token %}
+            {{form_bruteforce_pwd}}
+            <input type="submit" name="" id="bfLoginSubmit" value="Login">   
+     </form>
+     <div id = 'bfLogin'></div>
+     <div id = 'countdown'></div>
+     <div>
+         <p><br><br><br></p>
+     </div>
+
+    <script>
+        $(document).ready(function(){
+            var sectionID;
+            $('#loginBF').hide();
+            $('#checkusernameBF').on('submit', function(e){
+
+                e.preventDefault();
+                e.stopPropagation();
+
+                $.ajax({
+                    type: 'POST',
+                    url: 'preventBrutefoceCheckusername',
+                    dataType: 'json',
+                    data: $('#checkusernameBF').serialize(),
+                    success: function(data){
+                        $('#bfUserMess').html(data['mess']);
+                        sectionID = data['sectionID'];
+                        console.log( data['sectionID']);
+                        
+                        if (data['statusCode'] == 200) {
+                            $('#checkusernameBF').hide();
+                            $('#loginBF').show();
+                            }
+
+                    }
+                })
+
+            })
+
+        
+        $('#loginBF').on('submit', function(e){
+            e.preventDefault();
+                e.stopPropagation();
+                $('#bfLogin').show();
+                $('#countdown').show();
+                $.ajax({
+                    type: 'POST',
+                    url: 'preventBrutefoce',
+                    dataType: 'json',
+                    data:{
+                        sectionID: sectionID,                        
+                        password:  $('#loginBF input[name = password]').val(),
+                        csrfmiddlewaretoken:  $('#loginBF input[ name = csrfmiddlewaretoken]').val(),                      
+                    },
+                    success: function(data){
+                        console.log(data);
+                        var status = data['statusCode']
+                        if (status == 402){
+                            $('#bfLogin').html('Bạn nhập quá sai quá nhiều lần, vui lòng đợi');
+                            var timeLeft = data['mustwait'];
+                            var elem = document.getElementById('countdown');
+                            var timerId = setInterval(countdown, 1000);
+                            $('#bfLoginSubmit').prop( "disabled", true );
+                            function countdown() {
+                                if (timeLeft == -1) {
+                                    clearTimeout(timerId);
+                                    $('#bfLoginSubmit').prop( "disabled", false );
+                                    $('#countdown').hide();
+                                    $('#bfLogin').hide();
+                                } else {
+                                    elem.innerHTML = timeLeft + 'seconds remaining';
+                                    timeLeft--;
+                                }
+                            }
+                        }
+                        else {
+                            $('#bfLogin').html(data['mess']);
+                            $('#countdown').hide();
+                        }
+                    }
+                })
+                console.log(sectionID);
+            })
+        })
+    </script>
 </section>
 </body>
 </html>
