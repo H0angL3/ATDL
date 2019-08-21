@@ -25,6 +25,8 @@ class UserSalt(models.Model):
     us_username = models.CharField(max_length=100)
     us_password = models.CharField(max_length=100)
     us_salt = models.CharField(max_length=50)
+    us_lock = models.BooleanField(default= False)
+
 
 class UserSaltSection(models.Model):
     uss_IDsection = models.AutoField(primary_key= True)
@@ -36,3 +38,4 @@ class Section(models.Model):
     s_IDsection = models.ForeignKey(UserSaltSection, on_delete= models.CASCADE, related_name = 'usersaltsection')
     s_FalseTimes = models.CharField(max_length=10, default= 0)
     s_lastTime = models.DateTimeField()
+

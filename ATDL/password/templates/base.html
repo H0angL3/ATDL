@@ -25,12 +25,20 @@
         <div id = 'andersonRes'></div>
         <script>
                 $(document).ready(function(){
+                    var user = $('#form_1 input[name=username]');
+                    var confpwd = $('#form_1 input[name = confirmPassword]');
+                    user.prop('required', false);
+                    confpwd.prop('required', false);
+                    // user.prop('class', 'hide');
+                    // confpwd.prop('class', 'hide');
+                    
+                   
+
                     $('#form_1').on('submit', function(e){
                         e.preventDefault();
                         e.stopPropagation();
                         $.ajax({
                             type: "POST",
-
                             url: "checkAnderson",
                             data: $('#form_1').serialize(),
                             dataType:'json',

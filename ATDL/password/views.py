@@ -149,6 +149,9 @@ def prevBrutefoce(request):
             section = UserSaltSection.objects.get(uss_IDsection = section_post)
             user = section.uss_IDuser
             sectionInfo = section.usersaltsection.all()[0]
+            if sectionInfo.s_FalseTimes == 5:
+                user.us_lock == True
+                user.save()
             #check password
             if section.uss_status == False:
                 lastTime = sectionInfo.s_lastTime
