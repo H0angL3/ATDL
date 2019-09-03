@@ -27,7 +27,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -50,7 +49,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 ROOT_URLCONF = 'ATDL.urls'
 
 TEMPLATES = [
@@ -125,3 +124,6 @@ CSS_PASSWORD_URL = '/css/'
 CSS__PASSWORD_ROOT = os.path.join(BASE_DIR,'password/static/css')
 JS_PASSWORD_URL = '/js/'
 JS_PASSWORD_ROOT = os.path.join(BASE_DIR,'password/static/js')
+#
+BELL_ROOT = os.path.join(BASE_DIR, 'macBellLaPadula/storage')
+BELL_URL = '/BellStorage/'

@@ -14,5 +14,5 @@ admin.site.register(Sc_User, Sc_UserAdmin)
 
 
 class ObjectAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name', 'path', 'category', 'classification']
+    list_display = ['id', 'title', 'filename','path', 'category', 'classification']
 admin.site.register(Object, ObjectAdmin)

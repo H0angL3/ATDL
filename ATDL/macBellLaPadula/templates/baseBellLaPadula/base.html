@@ -5,15 +5,37 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <link rel="stylesheet" href="{{ '/macBellLaPadula/css/style.css' }}">
+    <script src="{{ '/macBellLaPadula/js/jquery-3.4.1.min.js' }}"></script>
+    <title>MAC Bell LaPadula</title>
 </head>
 <body>
-    Mô hình bảo mật Bell LaPadula (MAC)
-
-    <form action="">
+    <h2>Mô hình bảo mật Bell LaPadula (MAC)</h2>
+    <h3>Login</h3>
+    <form action="" id="loginform">
         {%csrf_token%}
-        {{ textArea }}
-        <input type="submit" value="save">
+        {{ login }}
+        <input type="submit" value="Login" id = 'login'>
     </form>
+
+    <script>
+    $(document).ready(function(){
+        $('#loginform').on('submit', function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            $.ajax({
+                type: "POST",
+                url: 'login',
+                data: $('#loginform').serialize(),
+                success:function(data){
+                    console.log(data);
+                    window.location = data['url'];
+                }
+            })
+        })
+
+    })
+    </script>
+
 </body>
 </html>

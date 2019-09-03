@@ -1,0 +1,24 @@
+{
+    "name": "file-tree",
+    "version": "0.1.0",
+    "authors": [
+        "Mathias Dewelde <mathias@dewelde.be>"
+    ],
+    "description": "File tree is a jQuery plugin using the bootstrap theme",
+    "keywords": [
+        "bootstrap",
+        "file-tree",
+        "Filetree"
+    ],
+        "license": "MIT",
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components"
+    ],
+    "dependencies": {
+        "bootstrap": "~3.1.1",
+        "nestedSortable": "2.0alpha",
+        "jquery-ui": "~1.10.4"
+    }
+}

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="{{ '/macBellLaPadula/js/jquery-3.4.1.min.js' }}"></script>
+    <title>New Document</title>
+</head>
+<body>
+    <form action="" id="newdocform">
+        {%csrf_token%}
+        {{ newdoc }}
+        <input type="submit" name="" id="" value="save">
+    </form>
+    <script>
+            $(document).ready(function(){
+                $('#newdocform').on('submit', function(e){
+                    e.preventDefault();
+                    e.stopPropagation();
+                    $.ajax({
+                        type: "POST",
+                        url: 'create-document',
+                        data: $('#newdocform').serialize(),
+                        success:function(data){
+                            console.log(data);
+                        }
+                    })
+                })
+        
+            })
+            </script>
+</body>
+</html>

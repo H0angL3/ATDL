@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="{{ '/macBellLaPadula/js/jquery-3.4.1.min.js' }}"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div id = 'userinfo'></div>
+        Hello <div id = 'username'></div>
+        <div id="category"></div>
+    <div class = 'readlist'>
+        <table id = 'readabletable'>            
+        </table>
+    </div>
+    <a class="btn btn-primary" href="new-document">New Document</a>
+
+    <script type="text/javascript">
+    // xu li context
+        function readDoc(id){
+                console.log('click');
+                console.log(id);
+                // $.ajax({
+                //     type: "POST",
+                //     url: "read-document",
+                //     data: id,
+                // })
+            }
+        $(document).ready(function(){
+            var userinfo = JSON.parse('{{ userinfo | escapejs }}');
+            var readlist = JSON.parse('{{ read_list | escapejs }}');
+            console.log(readlist);
+            $('#username').html(userinfo['username']);
+            var usercates = '';
+            for (item in userinfo['secretLV']){
+                usercates += item + ' : ' + userinfo['secretLV'][item] + "</br>";
+            }
+            $('#category').html(usercates);
+            var readableTable = "<tr><th>File title</th><th>Category</th><th>Secret Level</th><tr>";
+            var urlBase = window.location.origin;
+            var fileid= 1;
+            for (file in readlist){
+                var f = readlist[file];
+                var url = urlBase + f['fileurl'];
+                fileid = f['id'];
+                console.log(fileid);
+                readableTable += "<tr><td><a href = 'javascript:readDoc(1);' >" + file + "</a></td><td>" + f['category'] + "</td><td>" + f['classification'] + "</td></tr>";
+            }
+            // them su lieu vao bang
+            $('#readabletable').html(readableTable);
+            // xu li click link
+            // $('#readabletable a').click(function(event){
+            //     event.preventDefault();
+            //     console.log('click');
+            //     console.log($('#readabletable a').attr('id'))
+            // })
+
+        })
+        
+     </script>
+</body>
+</html>
